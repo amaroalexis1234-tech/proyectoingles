@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Theme toggle real via next-themes (clase .dark en <html>). :root son los
+  tokens claros (default), .dark los sobreescribe -- los valores oscuros son
+  exactamente los que antes vivian fijos en :root, preservados 1:1 para no
+  regresionar visualmente ninguna pantalla ya construida en modo oscuro.
+*/
+:root {
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #d97706;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border: #e2e8f0;
+  --accent-green: #16a34a;
+  --accent-purple: #9333ea;
+  --accent-orange: #ea580c;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.08);
+  --auth-aside-bg: #1d4ed8;
+  --auth-aside-foreground: #ffffff;
+}
+
+.dark {
+  --background: #0f172a;
+  --surface: #1e293b;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --success: #22c55e;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --border: #334155;
+  --accent-green: #22c55e;
+  --accent-purple: #a855f7;
+  --accent-orange: #f97316;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --auth-aside-bg: #0f172a;
+  --auth-aside-foreground: #ffffff;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-feature-settings: "cv11", "ss01";
+}

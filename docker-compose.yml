@@ -1,0 +1,25 @@
+# Levanta solo la base de datos en contenedor. El backend y el frontend
+# siguen corriendo localmente (venv / npm), como ya los configuramos —
+# esto solo reemplaza la instalación manual de MySQL + Workbench.
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: umph_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: umph_root_password
+      MYSQL_DATABASE: umph_db
+      MYSQL_USER: umph_user
+      MYSQL_PASSWORD: umph_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - umph_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-pumph_root_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  umph_mysql_data:
