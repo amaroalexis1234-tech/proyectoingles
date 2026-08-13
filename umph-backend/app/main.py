@@ -44,16 +44,21 @@ app = FastAPI(title=settings.APP_NAME)
 
 
 # --- CORS ---
-# Permitimos el frontend desde localhost, 127.0.0.1
-# y la IP local de la computadora durante desarrollo.
+# localhost/127.0.0.1 siempre permitidos (desarrollo). settings.FRONTEND_ORIGIN
+# se agrega aparte -- en produccion apunta al dominio real del frontend
+# desplegado (ej. Vercel), configurable sin tocar codigo.
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://192.168.1.26:3000",
-    ],
+    allow_origins=list(
+        dict.fromkeys(
+            [
+                "http://localhost:3000",
+                "http://127.0.0.1:3000",
+                settings.FRONTEND_ORIGIN,
+            ]
+        )
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

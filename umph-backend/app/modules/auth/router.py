@@ -35,12 +35,18 @@ REFRESH_COOKIE_MAX_AGE = 60 * 60 * 24 * settings.REFRESH_TOKEN_EXPIRE_DAYS
 
 
 def _set_refresh_cookie(response: Response, user_id: str) -> None:
+    is_production = settings.ENVIRONMENT != "development"
     response.set_cookie(
         key=REFRESH_COOKIE_NAME,
         value=create_refresh_token(user_id),
         httponly=True,
-        secure=settings.ENVIRONMENT != "development",  # requiere HTTPS en produccion
-        samesite="lax",
+        secure=is_production,  # requiere HTTPS en produccion
+        # "lax" en dev (mismo origen localhost). En produccion el frontend
+        # (Vercel) y el backend (Railway) viven en dominios distintos, asi
+        # que la cookie debe ser "none" -- "lax" jamas se manda en un fetch
+        # cross-site y el refresh se rompe en silencio. "none" exige secure=True,
+        # que ya es el caso en produccion.
+        samesite="none" if is_production else "lax",
         max_age=REFRESH_COOKIE_MAX_AGE,
         # Debe coincidir con el prefijo real montado en main.py (app.include_router(..., prefix="/api")).
         # Si difieren, el navegador nunca envia la cookie de vuelta.
